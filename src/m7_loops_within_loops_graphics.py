@@ -5,8 +5,8 @@ This problem provides practice at:
   ***  LOOPS WITHIN LOOPS in 2D GRAPHICS problems.  ***
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Carson Meyer.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 ########################################################################
 # Students:
@@ -29,11 +29,12 @@ Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
 ########################################################################
 
 import rosegraphics as rg
+import math
 
 
 def main():
     """ Calls the   TEST   functions in this module. """
-    run_test_hourglass()
+    #run_test_hourglass()
     run_test_many_hourglasses()
 
 
@@ -89,7 +90,7 @@ def hourglass(window, n, point, radius, color):
     a color that rosegraphics understands.
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #       We provided some tests for you (above).
     # ------------------------------------------------------------------
     ####################################################################
@@ -101,7 +102,37 @@ def hourglass(window, n, point, radius, color):
     #    DIFFICULTY:      8
     #    TIME ESTIMATE:  25 minutes (warning: this problem is challenging)
     # ------------------------------------------------------------------
+    first_x = point.x
+    first_y = point.y
+    radius = radius
 
+    x = first_x
+    y = first_y
+    for k in range(n):
+        for j in range(k + 1):
+            new_circle = rg.Circle(rg.Point(x, y), radius)
+            new_circle.fill_color = color
+            new_circle.attach_to(window.initial_canvas)
+            window.render(0.1)
+
+            x = x + (2 * radius)
+
+        y = y + 1.75 * radius
+        x = first_x - (radius * (k + 1))
+
+    x = first_x
+    y = first_y
+    for k in range(n):
+        for j in range(k + 1):
+            new_circle = rg.Circle(rg.Point(x, y), radius)
+            new_circle.fill_color = color
+            new_circle.attach_to(window.initial_canvas)
+            window.render(0.1)
+
+            x = x + (2 * radius)
+
+        y = y - 1.75 * radius
+        x = first_x - (radius * (k + 1))
 
 def run_test_many_hourglasses():
     """ Tests the    many_hourglasses    function. """
@@ -163,7 +194,7 @@ def many_hourglasses(window, square, m, colors):
     each of which denotes a color that rosegraphics understands.
     """
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #       We provided some tests for you (above).
     # ------------------------------------------------------------------
     ####################################################################
@@ -179,8 +210,24 @@ def many_hourglasses(window, square, m, colors):
     #                         a correct "hourglass" function above)
     #    TIME ESTIMATE:  20 minutes (warning: this problem is challenging)
     # ------------------------------------------------------------------
+    s = 0
+    for k in range(m):
+        center = square.center
+        length = square.length_of_each_side / 2
+        point1 = rg.Point(center.x + k * 1 + 1, center.y + (k * math.sqrt(3) * 1 + 1))
+        point2 = rg.Point(center.x - k * 1 - 1, center.y - (k * math.sqrt(3) * 1 + 1))
+        rectangle = rg.Rectangle(point1, point2)
+        center.x = center.x + (3 + 2 * k) * 1
+        rectangle.attach_to(window)
+        window.render()
+        while s < len(colors):
+            a = colors[s]
+            if s == len(colors) - 1:
+                s = -1
 
-
+            s = s + 1
+            break
+        hourglass(window, k + 1, rectangle.get_center(), 1, a)
 # ----------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # ----------------------------------------------------------------------
